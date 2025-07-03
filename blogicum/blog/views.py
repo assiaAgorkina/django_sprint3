@@ -9,7 +9,6 @@ def index(request):
         is_published=True,  # Только опубликованные
         category__is_published=True  # Только из опубликованных категорий
     ).order_by('-pub_date')[:5]  # Последние 5 постов
-    
     context = {'posts': posts}
     return render(request, 'blog/index.html', context)
 
@@ -22,7 +21,6 @@ def post_detail(request, id):
         is_published=True,
         category__is_published=True
     )
-    
     context = {'post': post}
     return render(request, 'blog/detail.html', context)
 
@@ -33,13 +31,11 @@ def category_posts(request, category_slug):
         slug=category_slug,
         is_published=True
     )
-    
     posts = Post.objects.select_related('author').filter(
         category=category,
         pub_date__lte=timezone.now(),
         is_published=True
     ).order_by('-pub_date')
-    
     context = {
         'category': category,
         'posts': posts
